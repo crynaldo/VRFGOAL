@@ -26,7 +26,7 @@ export function RobloxUserInput({ label, onUserFetch, optional = false }: Roblox
 
   const handleFetch = async () => {
     if (!userId.trim()) {
-      setError('Please enter a user ID')
+      setError('Please enter a username or user ID')
       return
     }
 
@@ -93,7 +93,7 @@ export function RobloxUserInput({ label, onUserFetch, optional = false }: Roblox
         <div className="flex gap-2">
           <Input
             type="text"
-            placeholder="Enter Roblox User ID"
+            placeholder="Enter username or ID"
             value={userId}
             onChange={(e) => setUserId(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleFetch()}
