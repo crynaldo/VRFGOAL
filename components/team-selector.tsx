@@ -5,8 +5,8 @@ import { leagues, LeagueKey } from '@/lib/teams'
 import { cn } from '@/lib/utils'
 
 interface TeamSelectorProps {
-  onTeamSelect: (team: { name: string; logo: string; league: string }) => void
-  selectedTeam: { name: string; logo: string; league: string } | null
+  onTeamSelect: (team: { name: string; logo: string; league: string; primaryColor: string; secondaryColor: string }) => void
+  selectedTeam: { name: string; logo: string; league: string; primaryColor: string; secondaryColor: string } | null
 }
 
 export function TeamSelector({ onTeamSelect, selectedTeam }: TeamSelectorProps) {

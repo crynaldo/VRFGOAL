@@ -16,13 +16,13 @@ interface RobloxUser {
 
 export default function Home() {
   const [step, setStep] = useState<'team' | 'details' | 'result'>('team')
-  const [selectedTeam, setSelectedTeam] = useState<{ name: string; logo: string; league: string } | null>(null)
+  const [selectedTeam, setSelectedTeam] = useState<{ name: string; logo: string; league: string; primaryColor: string; secondaryColor: string } | null>(null)
   const [scorer, setScorer] = useState<RobloxUser | null>(null)
   const [assister, setAssister] = useState<RobloxUser | null>(null)
   const [minute, setMinute] = useState('')
   const [error, setError] = useState<string | null>(null)
 
-  const handleTeamSelect = (team: { name: string; logo: string; league: string }) => {
+  const handleTeamSelect = (team: { name: string; logo: string; league: string; primaryColor: string; secondaryColor: string }) => {
     setSelectedTeam(team)
     setStep('details')
   }
