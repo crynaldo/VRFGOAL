@@ -15,206 +15,170 @@ interface GoalCelebrationCardProps {
 }
 
 export function GoalCelebrationCard({ scorer, minute, team, assister }: GoalCelebrationCardProps) {
+  const primary = team.primaryColor
+  const secondary = team.secondaryColor || team.primaryColor
+
   return (
-    <div className="w-full max-w-md mx-auto animate-float-in">
-      {/* Outer glowing border */}
-      <div 
-        className="relative p-[2px] rounded-[1.5rem] overflow-hidden"
+    <div className="w-full max-w-sm mx-auto animate-float-in">
+      {/* Outer glowing frame */}
+      <div
+        className="relative rounded-[2rem] p-[1.5px] overflow-hidden"
         style={{
-          background: `linear-gradient(180deg, ${team.primaryColor}80, ${team.primaryColor}20, ${team.primaryColor}60)`,
-          boxShadow: `0 0 60px ${team.primaryColor}40, inset 0 0 60px ${team.primaryColor}10`,
+          background: `linear-gradient(160deg, ${primary}cc, ${primary}22 35%, transparent 60%, ${primary}66)`,
+          boxShadow: `0 0 80px ${primary}55, 0 20px 60px rgba(0,0,0,0.7)`,
         }}
       >
-        {/* Main card with stadium background */}
-        <div 
-          className="relative rounded-[1.4rem] overflow-hidden"
-          style={{
-            background: `linear-gradient(180deg, ${team.primaryColor}15 0%, #050510 30%, #0a0a1a 100%)`,
-          }}
-        >
-          {/* Stadium background image */}
-          <div 
-            className="absolute inset-0 opacity-40"
+        {/* Card body */}
+        <div className="relative rounded-[1.95rem] overflow-hidden bg-[#05070d]">
+          {/* Stadium background */}
+          <div
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ backgroundImage: 'url(/vrf-stadium.png)' }}
+          />
+
+          {/* Darkening + team tint overlays for legibility */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#05070d]/40 via-[#05070d]/70 to-[#05070d]/95" />
+          <div
+            className="absolute inset-0 mix-blend-overlay"
             style={{
-              backgroundImage: 'url(/stadium-bg.jpg)',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center top',
+              background: `radial-gradient(ellipse at 50% 30%, ${primary}66, transparent 65%)`,
             }}
           />
-          
-          {/* Team color overlay gradient */}
-          <div 
-            className="absolute inset-0"
+          <div
+            className="absolute inset-x-0 top-0 h-1/2"
             style={{
-              background: `linear-gradient(180deg, ${team.primaryColor}30 0%, transparent 40%, ${team.primaryColor}10 100%)`,
+              background: `linear-gradient(180deg, ${primary}40, transparent)`,
             }}
           />
 
-          {/* Light rays effect */}
-          <div 
-            className="absolute top-0 left-1/2 -translate-x-1/2 w-[200%] h-40 opacity-30"
+          {/* Top light sweep */}
+          <div
+            className="absolute -top-10 left-1/2 -translate-x-1/2 w-[160%] h-48 opacity-50 blur-2xl"
             style={{
-              background: `radial-gradient(ellipse at center top, ${team.primaryColor}60, transparent 70%)`,
+              background: `radial-gradient(ellipse at center, ${primary}aa, transparent 70%)`,
             }}
           />
-          
+
           {/* Content */}
-          <div className="relative px-6 py-10 flex flex-col items-center">
-            {/* Scorer Avatar with glowing ring */}
-            <div className="relative mb-6">
-              {/* Outer glow */}
-              <div 
-                className="absolute inset-0 rounded-full blur-xl opacity-60 scale-110"
-                style={{ backgroundColor: team.primaryColor }}
+          <div className="relative px-7 pt-9 pb-7 flex flex-col items-center">
+            {/* Scorer avatar */}
+            <div className="relative mb-5">
+              <div
+                className="absolute inset-0 rounded-full blur-2xl opacity-70 scale-125"
+                style={{ backgroundColor: primary }}
               />
-              {/* Avatar ring */}
-              <div 
+              <div
                 className="relative w-28 h-28 rounded-full p-[3px]"
                 style={{
-                  background: `linear-gradient(180deg, ${team.primaryColor}, ${team.secondaryColor || team.primaryColor}80)`,
-                  boxShadow: `0 0 30px ${team.primaryColor}60`,
+                  background: `conic-gradient(from 180deg, ${primary}, ${secondary}, ${primary})`,
+                  boxShadow: `0 0 40px ${primary}aa`,
                 }}
               >
-                <div className="w-full h-full rounded-full overflow-hidden bg-[#0a0a1a]">
+                <div className="w-full h-full rounded-full overflow-hidden bg-[#05070d] ring-2 ring-black/40">
                   {scorer.avatarUrl ? (
-                    <img
-                      src={scorer.avatarUrl}
-                      alt={scorer.name}
-                      className="w-full h-full object-cover"
-                    />
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={scorer.avatarUrl} alt={scorer.name} className="w-full h-full object-cover" crossOrigin="anonymous" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
-                      <span className="text-3xl font-bold text-white">
-                        {scorer.displayName.charAt(0)}
-                      </span>
+                      <span className="text-3xl font-bold text-white">{scorer.displayName.charAt(0)}</span>
                     </div>
                   )}
                 </div>
               </div>
             </div>
 
-            {/* GOAL! Text - 3D italic style */}
-            <h1 
-              className="text-6xl md:text-7xl font-black italic tracking-tight mb-4"
-              style={{ 
-                color: team.primaryColor,
-                textShadow: `
-                  0 0 40px ${team.primaryColor}80,
-                  0 4px 0 ${team.secondaryColor || team.primaryColor}40,
-                  0 8px 20px rgba(0,0,0,0.8)
-                `,
-                WebkitTextStroke: `1px ${team.primaryColor}`,
+            {/* GOAL! */}
+            <h1
+              className="text-[3.25rem] font-black italic tracking-tight mb-3 leading-none select-none whitespace-nowrap px-2"
+              style={{
+                background: `linear-gradient(180deg, #ffffff 10%, ${primary} 55%, ${primary}aa 100%)`,
+                WebkitBackgroundClip: 'text',
+                backgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                filter: `drop-shadow(0 0 25px ${primary}aa) drop-shadow(0 4px 8px rgba(0,0,0,0.8))`,
               }}
             >
               GOAL!
             </h1>
 
-            {/* Scorer Info */}
+            {/* Scorer name */}
             <div className="text-center mb-6">
-              <p className="text-2xl md:text-3xl font-bold text-white mb-1">
+              <p className="text-2xl font-extrabold text-white tracking-tight leading-tight drop-shadow-lg">
                 {scorer.displayName}
               </p>
-              <p className="text-neutral-500 text-sm">@{scorer.name}</p>
+              <p className="text-sm font-medium text-white/45">@{scorer.name}</p>
             </div>
 
-            {/* Minute Badge - Hexagonal style */}
-            <div className="relative mb-8">
-              {/* Side decorations */}
-              <div 
-                className="absolute top-1/2 -translate-y-1/2 -left-12 w-8 h-[2px]"
-                style={{ 
-                  background: `linear-gradient(90deg, transparent, ${team.primaryColor})`,
-                }}
-              />
-              <div 
-                className="absolute top-1/2 -translate-y-1/2 -right-12 w-8 h-[2px]"
-                style={{ 
-                  background: `linear-gradient(270deg, transparent, ${team.primaryColor})`,
-                }}
-              />
-              {/* Badge */}
-              <div 
-                className="relative px-8 py-3 clip-hexagon"
-                style={{ 
-                  backgroundColor: `${team.primaryColor}15`,
-                  border: `2px solid ${team.primaryColor}60`,
-                  boxShadow: `0 0 20px ${team.primaryColor}30`,
+            {/* Minute badge */}
+            <div className="relative mb-7 flex items-center gap-3">
+              <div className="h-[1.5px] w-10" style={{ background: `linear-gradient(90deg, transparent, ${primary})` }} />
+              <div
+                className="relative px-7 py-2 clip-hexagon backdrop-blur-sm"
+                style={{
+                  background: `linear-gradient(180deg, ${primary}33, ${primary}11)`,
+                  border: `1.5px solid ${primary}99`,
+                  boxShadow: `0 0 25px ${primary}55, inset 0 0 15px ${primary}22`,
                 }}
               >
-                <span 
-                  className="text-2xl font-bold"
-                  style={{ color: team.primaryColor }}
-                >
+                <span className="text-xl font-black text-white tracking-wide" style={{ textShadow: `0 0 12px ${primary}` }}>
                   {minute}&apos;
                 </span>
               </div>
+              <div className="h-[1.5px] w-10" style={{ background: `linear-gradient(270deg, transparent, ${primary})` }} />
             </div>
 
-            {/* Team Section - Hexagonal frame */}
-            <div className="relative mb-8">
-              {/* Hexagon frame */}
-              <div 
-                className="relative p-[2px] clip-hexagon-tall"
-                style={{
-                  background: `linear-gradient(180deg, ${team.primaryColor}80, ${team.primaryColor}30)`,
-                }}
+            {/* Team panel */}
+            <div className="relative w-full max-w-[15rem] mb-2">
+              <div
+                className="relative rounded-2xl p-[1.5px] overflow-hidden"
+                style={{ background: `linear-gradient(180deg, ${primary}aa, ${primary}22)` }}
               >
-                <div 
-                  className="clip-hexagon-tall px-8 py-6 flex flex-col items-center gap-3"
-                  style={{ 
-                    backgroundColor: `rgba(10, 10, 26, 0.9)`,
-                  }}
+                <div
+                  className="rounded-2xl px-6 pt-6 pb-4 flex flex-col items-center gap-3 backdrop-blur-md"
+                  style={{ background: `linear-gradient(180deg, rgba(8,10,18,0.85), rgba(8,10,18,0.65))` }}
                 >
+                  <div
+                    className="absolute inset-x-0 top-0 h-px"
+                    style={{ background: `linear-gradient(90deg, transparent, ${primary}, transparent)` }}
+                  />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={team.logo}
                     alt={team.name}
-                    className="w-20 h-20 object-contain drop-shadow-lg"
+                    className="w-20 h-20 object-contain"
+                    style={{ filter: `drop-shadow(0 4px 14px ${primary}88)` }}
+                    crossOrigin="anonymous"
                   />
+                  <p className="text-center font-bold tracking-[0.12em] text-xs uppercase text-white/90">
+                    {team.name}
+                  </p>
                 </div>
               </div>
-              {/* Team name below hexagon */}
-              <p 
-                className="text-center mt-3 font-bold tracking-wide text-sm uppercase"
-                style={{ color: team.primaryColor }}
-              >
-                {team.name}
-              </p>
             </div>
 
-            {/* Assist Section */}
+            {/* Assist */}
             {assister && (
-              <div className="absolute bottom-6 left-6 flex items-center gap-3">
-                {/* Assist avatar */}
-                <div 
-                  className="w-12 h-12 rounded-full p-[2px]"
-                  style={{
-                    background: `linear-gradient(180deg, ${team.primaryColor}80, ${team.primaryColor}40)`,
-                  }}
+              <div className="mt-5 w-full flex items-center gap-3 pt-4 border-t border-white/10">
+                <div
+                  className="w-11 h-11 rounded-full p-[2px] shrink-0"
+                  style={{ background: `linear-gradient(180deg, ${primary}, ${secondary}80)` }}
                 >
-                  <div className="w-full h-full rounded-full overflow-hidden bg-[#0a0a1a]">
+                  <div className="w-full h-full rounded-full overflow-hidden bg-[#05070d]">
                     {assister.avatarUrl ? (
-                      <img
-                        src={assister.avatarUrl}
-                        alt={assister.name}
-                        className="w-full h-full object-cover"
-                      />
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={assister.avatarUrl} alt={assister.name} className="w-full h-full object-cover" crossOrigin="anonymous" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
-                        <span className="font-bold text-white text-sm">
-                          {assister.displayName.charAt(0)}
-                        </span>
+                        <span className="font-bold text-white text-sm">{assister.displayName.charAt(0)}</span>
                       </div>
                     )}
                   </div>
                 </div>
-                <div>
-                  <p 
-                    className="text-xs font-semibold uppercase tracking-wider"
-                    style={{ color: team.primaryColor }}
-                  >
+                <div className="min-w-0">
+                  <p className="text-[0.65rem] font-bold uppercase tracking-[0.18em]" style={{ color: primary }}>
                     Assist
                   </p>
-                  <p className="font-bold text-white text-sm">{assister.displayName}</p>
+                  <p className="font-bold text-white text-sm truncate">{assister.displayName}</p>
                 </div>
               </div>
             )}

@@ -29,7 +29,6 @@ export default function Home() {
 
   const handleSubmit = () => {
     setError(null)
-    console.log('[v0] Submit clicked, scorer:', scorer, 'minute:', minute)
 
     if (!scorer) {
       setError('Please fetch the goalscorer')
