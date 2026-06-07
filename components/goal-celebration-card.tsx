@@ -182,6 +182,18 @@ export function GoalCelebrationCard({ scorer, minute, team, assister }: GoalCele
                 </div>
               </div>
             )}
+
+            {/* VRF watermark logo */}
+            <div className="absolute bottom-4 right-4 opacity-80">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/vrf-logo.png"
+                alt="VRF"
+                className="w-8 h-8 object-contain"
+                style={{ filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.8))' }}
+                crossOrigin="anonymous"
+              />
+            </div>
           </div>
         </div>
       </div>

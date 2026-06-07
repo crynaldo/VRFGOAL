@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
+import { toPng } from 'html-to-image'
 import { TeamSelector } from '@/components/team-selector'
 import { RobloxUserInput } from '@/components/roblox-user-input'
 import { GoalCelebrationCard } from '@/components/goal-celebration-card'
@@ -21,6 +22,8 @@ export default function Home() {
   const [assister, setAssister] = useState<RobloxUser | null>(null)
   const [minute, setMinute] = useState('')
   const [error, setError] = useState<string | null>(null)
+  const cardRef = useRef<HTMLDivElement>(null)
+  const [copyState, setCopyState] = useState<'idle' | 'working' | 'copied' | 'error'>('idle')
 
   const handleTeamSelect = (team: { name: string; logo: string; league: string; primaryColor: string; secondaryColor: string }) => {
     setSelectedTeam(team)
@@ -56,6 +59,39 @@ export default function Home() {
     setAssister(null)
     setMinute('')
     setError(null)
+    setCopyState('idle')
+  }
+
+  const handleCopyImage = async () => {
+    if (!cardRef.current) return
+    setCopyState('working')
+    try {
+      const dataUrl = await toPng(cardRef.current, {
+        cacheBust: true,
+        pixelRatio: 3,
+        skipFonts: false,
+      })
+      const blob = await (await fetch(dataUrl)).blob()
+
+      if (navigator.clipboard && typeof ClipboardItem !== 'undefined') {
+        await navigator.clipboard.write([
+          new ClipboardItem({ 'image/png': blob }),
+        ])
+        setCopyState('copied')
+      } else {
+        // Fallback: trigger a download if clipboard images are unsupported
+        const link = document.createElement('a')
+        link.download = `goal-${scorer?.name ?? 'celebration'}.png`
+        link.href = dataUrl
+        link.click()
+        setCopyState('copied')
+      }
+      setTimeout(() => setCopyState('idle'), 2500)
+    } catch (err) {
+      console.log('[v0] Copy image failed:', err)
+      setCopyState('error')
+      setTimeout(() => setCopyState('idle'), 2500)
+    }
   }
 
   return (
@@ -157,19 +193,32 @@ export default function Home() {
 
         {/* Step 3: Result */}
         {step === 'result' && scorer && selectedTeam && (
-          <div className="space-y-8 animate-float-in">
-            <GoalCelebrationCard
-              scorer={scorer}
-              minute={minute}
-              team={selectedTeam}
-              assister={assister}
-            />
+          <div className="space-y-6 animate-float-in">
+            <div ref={cardRef}>
+              <GoalCelebrationCard
+                scorer={scorer}
+                minute={minute}
+                team={selectedTeam}
+                assister={assister}
+              />
+            </div>
 
-            <div className="flex justify-center">
+            <div className="flex flex-col items-center gap-3 max-w-sm mx-auto">
+              <Button
+                onClick={handleCopyImage}
+                disabled={copyState === 'working'}
+                className="w-full bg-accent text-accent-foreground hover:bg-accent/90 font-semibold py-6 text-base"
+              >
+                {copyState === 'working' && 'Generating image...'}
+                {copyState === 'copied' && 'Copied to clipboard!'}
+                {copyState === 'error' && 'Copy failed — try again'}
+                {copyState === 'idle' && 'Copy image to clipboard'}
+              </Button>
+
               <Button
                 onClick={handleReset}
                 variant="outline"
-                className="border-border text-foreground hover:bg-secondary"
+                className="w-full border-border text-foreground hover:bg-secondary"
               >
                 Create Another
               </Button>
