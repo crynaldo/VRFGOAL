@@ -12,15 +12,23 @@ interface GoalCelebrationCardProps {
   minute: string
   team: { name: string; logo: string; league: string; primaryColor: string; secondaryColor: string }
   assister?: RobloxUser | null
-  marker?: { x: number; y: number } | null
+  marker?: { x: number; y: number; cx: number; cy: number } | null
+  goalType?: string
 }
 
-export function GoalCelebrationCard({ scorer, minute, team, assister, marker }: GoalCelebrationCardProps) {
+// Shot origin (pitch level, center) — must match the picker
+const START = { x: 50, y: 99 }
+
+export function GoalCelebrationCard({ scorer, minute, team, assister, marker, goalType }: GoalCelebrationCardProps) {
   const primary = team.primaryColor
   const secondary = team.secondaryColor || team.primaryColor
 
+  const trailPath = marker
+    ? `M ${START.x} ${START.y} Q ${marker.cx} ${marker.cy} ${marker.x} ${marker.y}`
+    : ''
+
   return (
-    <div className="w-full max-w-sm mx-auto animate-float-in">
+    <div className="w-full max-w-md mx-auto animate-float-in">
       {/* Outer glowing frame */}
       <div
         className="relative rounded-[2rem] p-[1.5px] overflow-hidden"
@@ -61,7 +69,7 @@ export function GoalCelebrationCard({ scorer, minute, team, assister, marker }: 
           />
 
           {/* Content */}
-          <div className="relative px-7 pt-9 pb-7 flex flex-col items-center">
+          <div className="relative px-8 pt-9 pb-8 flex flex-col items-center">
             {/* Scorer avatar */}
             <div className="relative mb-5">
               <div
@@ -90,7 +98,7 @@ export function GoalCelebrationCard({ scorer, minute, team, assister, marker }: 
 
             {/* GOAL! */}
             <h1
-              className="text-[3.25rem] font-black italic tracking-tight mb-3 leading-none select-none whitespace-nowrap px-2"
+              className="text-6xl font-black italic tracking-tight mb-3 leading-none select-none whitespace-nowrap px-2"
               style={{
                 background: `linear-gradient(180deg, #ffffff 10%, ${primary} 55%, ${primary}aa 100%)`,
                 WebkitBackgroundClip: 'text',
@@ -112,7 +120,7 @@ export function GoalCelebrationCard({ scorer, minute, team, assister, marker }: 
 
             {/* Minute badge */}
             <div className="relative mb-7 flex items-center gap-3">
-              <div className="h-[1.5px] w-10" style={{ background: `linear-gradient(90deg, transparent, ${primary})` }} />
+              <div className="h-[1.5px] w-12" style={{ background: `linear-gradient(90deg, transparent, ${primary})` }} />
               <div
                 className="relative px-7 py-2 clip-hexagon backdrop-blur-sm"
                 style={{
@@ -125,11 +133,11 @@ export function GoalCelebrationCard({ scorer, minute, team, assister, marker }: 
                   {minute}&apos;
                 </span>
               </div>
-              <div className="h-[1.5px] w-10" style={{ background: `linear-gradient(270deg, transparent, ${primary})` }} />
+              <div className="h-[1.5px] w-12" style={{ background: `linear-gradient(270deg, transparent, ${primary})` }} />
             </div>
 
             {/* Team panel */}
-            <div className="relative w-full max-w-[15rem] mb-2">
+            <div className="relative w-full max-w-[19rem] mb-2">
               <div
                 className="relative rounded-2xl p-[1.5px] overflow-hidden"
                 style={{ background: `linear-gradient(180deg, ${primary}aa, ${primary}22)` }}
@@ -157,13 +165,11 @@ export function GoalCelebrationCard({ scorer, minute, team, assister, marker }: 
               </div>
             </div>
 
-            {/* Goal marker diagram */}
+            {/* Goal trail diagram */}
             {marker && (
-              <div className="mt-5 w-full max-w-[15rem]">
-                <p
-                  className="text-center text-[0.6rem] font-bold uppercase tracking-[0.2em] mb-2 text-white/60"
-                >
-                  Where it went in
+              <div className="mt-5 w-full max-w-[19rem]">
+                <p className="text-center text-[0.6rem] font-bold uppercase tracking-[0.2em] mb-2 text-white/60">
+                  How it went in
                 </p>
                 <div
                   className="relative w-full aspect-[2/1] rounded-lg overflow-hidden"
@@ -180,6 +186,32 @@ export function GoalCelebrationCard({ scorer, minute, team, assister, marker }: 
                     className="absolute inset-0 w-full h-full object-contain opacity-80"
                     crossOrigin="anonymous"
                   />
+
+                  {/* Shot trail */}
+                  <svg
+                    viewBox="0 0 100 100"
+                    preserveAspectRatio="none"
+                    className="absolute inset-0 w-full h-full pointer-events-none"
+                  >
+                    <path
+                      d={trailPath}
+                      fill="none"
+                      stroke={`${primary}66`}
+                      strokeWidth={7}
+                      strokeLinecap="round"
+                      vectorEffect="non-scaling-stroke"
+                    />
+                    <path
+                      d={trailPath}
+                      fill="none"
+                      stroke="#ffffff"
+                      strokeWidth={2}
+                      strokeLinecap="round"
+                      vectorEffect="non-scaling-stroke"
+                    />
+                  </svg>
+
+                  {/* Entry point (red ball) */}
                   <div
                     className="absolute -translate-x-1/2 -translate-y-1/2"
                     style={{ left: `${marker.x}%`, top: `${marker.y}%` }}
@@ -190,6 +222,38 @@ export function GoalCelebrationCard({ scorer, minute, team, assister, marker }: 
                     />
                   </div>
                 </div>
+
+                {/* Goal type caption */}
+                {goalType && (
+                  <div className="mt-2 flex justify-center">
+                    <span
+                      className="px-3 py-1 rounded-full text-[0.65rem] font-bold uppercase tracking-[0.15em] text-white"
+                      style={{
+                        background: `${primary}22`,
+                        border: `1px solid ${primary}66`,
+                        boxShadow: `0 0 12px ${primary}33`,
+                      }}
+                    >
+                      {goalType}
+                    </span>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Goal type caption when there is no trail diagram */}
+            {!marker && goalType && (
+              <div className="mt-4 flex justify-center">
+                <span
+                  className="px-3 py-1 rounded-full text-[0.65rem] font-bold uppercase tracking-[0.15em] text-white"
+                  style={{
+                    background: `${primary}22`,
+                    border: `1px solid ${primary}66`,
+                    boxShadow: `0 0 12px ${primary}33`,
+                  }}
+                >
+                  {goalType}
+                </span>
               </div>
             )}
 
@@ -219,18 +283,6 @@ export function GoalCelebrationCard({ scorer, minute, team, assister, marker }: 
                 </div>
               </div>
             )}
-
-            {/* VRF watermark logo */}
-            <div className="absolute bottom-9 right-5 opacity-80">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/vrf-logo.png"
-                alt="VRF"
-                className="w-7 h-7 object-contain"
-                style={{ filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.8))' }}
-                crossOrigin="anonymous"
-              />
-            </div>
           </div>
         </div>
       </div>

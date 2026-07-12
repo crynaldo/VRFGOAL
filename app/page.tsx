@@ -23,6 +23,7 @@ export default function Home() {
   const [assister, setAssister] = useState<RobloxUser | null>(null)
   const [minute, setMinute] = useState('')
   const [marker, setMarker] = useState<GoalMarker | null>(null)
+  const [goalType, setGoalType] = useState('')
   const [error, setError] = useState<string | null>(null)
   const cardRef = useRef<HTMLDivElement>(null)
   const [copyState, setCopyState] = useState<'idle' | 'working' | 'copied' | 'error'>('idle')
@@ -61,6 +62,7 @@ export default function Home() {
     setAssister(null)
     setMinute('')
     setMarker(null)
+    setGoalType('')
     setError(null)
     setCopyState('idle')
   }
@@ -179,7 +181,12 @@ export default function Home() {
               />
 
               {/* Goal marker (Optional) */}
-              <GoalMarkerPicker marker={marker} onChange={setMarker} />
+              <GoalMarkerPicker
+                marker={marker}
+                onChange={setMarker}
+                goalType={goalType}
+                onGoalTypeChange={setGoalType}
+              />
 
               {/* Error */}
               {error && (
@@ -207,6 +214,7 @@ export default function Home() {
                 team={selectedTeam}
                 assister={assister}
                 marker={marker}
+                goalType={goalType}
               />
             </div>
 
