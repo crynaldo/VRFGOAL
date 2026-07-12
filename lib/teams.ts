@@ -66,3 +66,62 @@ export const leagues = {
 }
 
 export type LeagueKey = keyof typeof leagues
+
+const flag = (code: string) => `https://flagcdn.com/w320/${code}.png`
+
+export const nations = {
+  asia: {
+    name: 'Asia',
+    teams: [
+      { name: 'China', logo: flag('cn'), primaryColor: '#DE2910', secondaryColor: '#FFDE00' },
+      { name: 'India', logo: flag('in'), primaryColor: '#FF9933', secondaryColor: '#138808' },
+      { name: 'Indonesia', logo: flag('id'), primaryColor: '#FF0000', secondaryColor: '#FFFFFF' },
+      { name: 'Iran', logo: flag('ir'), primaryColor: '#239F40', secondaryColor: '#DA0000' },
+      { name: 'Iraq', logo: flag('iq'), primaryColor: '#CE1126', secondaryColor: '#007A3D' },
+      { name: 'Japan', logo: flag('jp'), primaryColor: '#BC002D', secondaryColor: '#FFFFFF' },
+      { name: 'Malaysia', logo: flag('my'), primaryColor: '#CC0001', secondaryColor: '#010066' },
+      { name: 'Oman', logo: flag('om'), primaryColor: '#DB161B', secondaryColor: '#008000' },
+      { name: 'Qatar', logo: flag('qa'), primaryColor: '#8A1538', secondaryColor: '#FFFFFF' },
+      { name: 'Saudi Arabia', logo: flag('sa'), primaryColor: '#006C35', secondaryColor: '#FFFFFF' },
+      { name: 'South Korea', logo: flag('kr'), primaryColor: '#003478', secondaryColor: '#C60C30' },
+      { name: 'Thailand', logo: flag('th'), primaryColor: '#A51931', secondaryColor: '#2D2A4A' },
+      { name: 'United Arab Emirates', logo: flag('ae'), primaryColor: '#00732F', secondaryColor: '#FF0000' },
+      { name: 'Uzbekistan', logo: flag('uz'), primaryColor: '#1EB53A', secondaryColor: '#0099B5' },
+      { name: 'Vietnam', logo: flag('vn'), primaryColor: '#DA251D', secondaryColor: '#FFFF00' },
+    ]
+  },
+  southAmerica: {
+    name: 'South America',
+    teams: [
+      { name: 'Argentina', logo: flag('ar'), primaryColor: '#75AADB', secondaryColor: '#F6B40E' },
+      { name: 'Bolivia', logo: flag('bo'), primaryColor: '#D52B1E', secondaryColor: '#007934' },
+      { name: 'Brazil', logo: flag('br'), primaryColor: '#009C3B', secondaryColor: '#FFDF00' },
+      { name: 'Chile', logo: flag('cl'), primaryColor: '#0039A6', secondaryColor: '#D52B1E' },
+      { name: 'Colombia', logo: flag('co'), primaryColor: '#FCD116', secondaryColor: '#003893' },
+      { name: 'Ecuador', logo: flag('ec'), primaryColor: '#FFD100', secondaryColor: '#034EA2' },
+      { name: 'Paraguay', logo: flag('py'), primaryColor: '#D52B1E', secondaryColor: '#0038A8' },
+      { name: 'Peru', logo: flag('pe'), primaryColor: '#D91023', secondaryColor: '#FFFFFF' },
+      { name: 'Uruguay', logo: flag('uy'), primaryColor: '#0038A8', secondaryColor: '#FCD116' },
+      { name: 'Venezuela', logo: flag('ve'), primaryColor: '#FCE300', secondaryColor: '#00247D' },
+    ]
+  },
+  northAmerica: {
+    name: 'North America',
+    teams: [
+      { name: 'Canada', logo: flag('ca'), primaryColor: '#D80621', secondaryColor: '#FFFFFF' },
+      { name: 'Costa Rica', logo: flag('cr'), primaryColor: '#002B7F', secondaryColor: '#CE1126' },
+      { name: 'El Salvador', logo: flag('sv'), primaryColor: '#0F47AF', secondaryColor: '#FFFFFF' },
+      { name: 'Jamaica', logo: flag('jm'), primaryColor: '#009B3A', secondaryColor: '#FED100' },
+      { name: 'Mexico', logo: flag('mx'), primaryColor: '#006847', secondaryColor: '#CE1126' },
+      { name: 'United States', logo: flag('us'), primaryColor: '#0A3161', secondaryColor: '#B22234' },
+    ]
+  },
+  oceania: {
+    name: 'Oceania',
+    teams: [
+      { name: 'Australia', logo: flag('au'), primaryColor: '#012169', secondaryColor: '#E4002B' },
+    ]
+  },
+}
+
+export type NationKey = keyof typeof nations

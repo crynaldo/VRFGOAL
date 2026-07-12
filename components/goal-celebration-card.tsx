@@ -12,9 +12,10 @@ interface GoalCelebrationCardProps {
   minute: string
   team: { name: string; logo: string; league: string; primaryColor: string; secondaryColor: string }
   assister?: RobloxUser | null
+  marker?: { x: number; y: number } | null
 }
 
-export function GoalCelebrationCard({ scorer, minute, team, assister }: GoalCelebrationCardProps) {
+export function GoalCelebrationCard({ scorer, minute, team, assister, marker }: GoalCelebrationCardProps) {
   const primary = team.primaryColor
   const secondary = team.secondaryColor || team.primaryColor
 
@@ -155,6 +156,42 @@ export function GoalCelebrationCard({ scorer, minute, team, assister }: GoalCele
                 </div>
               </div>
             </div>
+
+            {/* Goal marker diagram */}
+            {marker && (
+              <div className="mt-5 w-full max-w-[15rem]">
+                <p
+                  className="text-center text-[0.6rem] font-bold uppercase tracking-[0.2em] mb-2 text-white/60"
+                >
+                  Where it went in
+                </p>
+                <div
+                  className="relative w-full aspect-[2/1] rounded-lg overflow-hidden"
+                  style={{
+                    background: 'rgba(0,0,0,0.55)',
+                    border: `1px solid ${primary}55`,
+                    boxShadow: `inset 0 0 18px ${primary}22`,
+                  }}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/goal-net.png"
+                    alt="Goal"
+                    className="absolute inset-0 w-full h-full object-contain opacity-80"
+                    crossOrigin="anonymous"
+                  />
+                  <div
+                    className="absolute -translate-x-1/2 -translate-y-1/2"
+                    style={{ left: `${marker.x}%`, top: `${marker.y}%` }}
+                  >
+                    <span
+                      className="block w-2.5 h-2.5 rounded-full bg-red-500"
+                      style={{ boxShadow: '0 0 8px 2px rgba(239,68,68,0.95)' }}
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Assist */}
             {assister && (

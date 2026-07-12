@@ -5,6 +5,7 @@ import { toPng } from 'html-to-image'
 import { TeamSelector } from '@/components/team-selector'
 import { RobloxUserInput } from '@/components/roblox-user-input'
 import { GoalCelebrationCard } from '@/components/goal-celebration-card'
+import { GoalMarkerPicker, GoalMarker } from '@/components/goal-marker-picker'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 
@@ -21,6 +22,7 @@ export default function Home() {
   const [scorer, setScorer] = useState<RobloxUser | null>(null)
   const [assister, setAssister] = useState<RobloxUser | null>(null)
   const [minute, setMinute] = useState('')
+  const [marker, setMarker] = useState<GoalMarker | null>(null)
   const [error, setError] = useState<string | null>(null)
   const cardRef = useRef<HTMLDivElement>(null)
   const [copyState, setCopyState] = useState<'idle' | 'working' | 'copied' | 'error'>('idle')
@@ -58,6 +60,7 @@ export default function Home() {
     setScorer(null)
     setAssister(null)
     setMinute('')
+    setMarker(null)
     setError(null)
     setCopyState('idle')
   }
@@ -120,7 +123,7 @@ export default function Home() {
           <div className="space-y-8 animate-float-in">
             <div className="text-center space-y-2">
               <h2 className="text-3xl font-bold text-foreground">Choose Your Team</h2>
-              <p className="text-muted-foreground">Select a team from one of the top leagues</p>
+              <p className="text-muted-foreground">Pick a club or national team to celebrate with</p>
             </div>
             <TeamSelector onTeamSelect={handleTeamSelect} selectedTeam={selectedTeam} />
           </div>
@@ -175,6 +178,9 @@ export default function Home() {
                 optional
               />
 
+              {/* Goal marker (Optional) */}
+              <GoalMarkerPicker marker={marker} onChange={setMarker} />
+
               {/* Error */}
               {error && (
                 <p className="text-sm text-destructive text-center">{error}</p>
@@ -200,6 +206,7 @@ export default function Home() {
                 minute={minute}
                 team={selectedTeam}
                 assister={assister}
+                marker={marker}
               />
             </div>
 
